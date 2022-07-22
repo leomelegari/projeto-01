@@ -1,0 +1,11 @@
+.wrapper {
+  max-width: 70rem;
+  margin: 2rem auto;
+  padding: 0 1rem;
+  display: grid;
+  /* como são dois elementos, tratamos como displya grid */
+  /* um com valor fixo e outro flexível de acordo com o tamanho da tela (fr)  */
+  grid-template-columns: 256px 1fr;
+  gap: 2rem;
+  align-items: flex-start;
+}
