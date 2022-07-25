@@ -107,6 +107,7 @@
 
 .commentForm button[type="submit"]:hover {
   background-color: var(--green-300);
+  transition: color 0.2s;
 }
 
 .commentList {

@@ -3,6 +3,7 @@ import { Comment } from "./Comment";
 import styles from "./Post.module.css";
 import { format, formatDistanceToNow } from "date-fns";
 import ptBR from "date-fns/locale/pt-BR";
+import { useState } from "react";
 
 interface Props {
   id?: number;
@@ -19,6 +20,12 @@ interface Props {
 }
 
 export const Post = ({ author, publishedAt, content }: Props) => {
+  const [comment, setComment] = useState([
+    "Excelente! Parabéns pelo post e contribuição!",
+  ]);
+
+  const [newCommentText, setNewCommentText] = useState("");
+
   const formattedDate = format(publishedAt, "d 'de' LLLL 'às' HH:mm'h'", {
     locale: ptBR,
   });
@@ -27,6 +34,16 @@ export const Post = ({ author, publishedAt, content }: Props) => {
     locale: ptBR,
     addSuffix: true,
   });
+
+  const handleCreateComment = () => {
+    event?.preventDefault();
+    setComment([...comment, newCommentText]);
+    setNewCommentText("");
+  };
+
+  const handleNewCommentChange = () => {
+    setNewCommentText(event?.target?.value);
+  };
 
   return (
     <article className={styles.post}>
@@ -56,18 +73,23 @@ export const Post = ({ author, publishedAt, content }: Props) => {
         })}
       </div>
 
-      <form className={styles.commentForm}>
+      <form onSubmit={handleCreateComment} className={styles.commentForm}>
         <strong>Deixe seu feedback</strong>
-        <textarea placeholder="Deixe um comentário" />
+        <textarea
+          onChange={handleNewCommentChange}
+          name="commentArea"
+          value={newCommentText}
+          placeholder="Deixe um comentário"
+        />
         <footer>
           <button type="submit">Publicar</button>
         </footer>
       </form>
 
       <div className={styles.commentList}>
-        <Comment />
-        <Comment />
-        <Comment />
+        {comment.map((comment) => {
+          return <Comment content={comment} />;
+        })}
       </div>
     </article>
   );
