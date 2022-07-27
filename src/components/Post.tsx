@@ -20,7 +20,7 @@ interface Props {
 }
 
 export const Post = ({ author, publishedAt, content }: Props) => {
-  const [comment, setComment] = useState([]);
+  const [comment, setComment] = useState<string[]>([]);
   const [newCommentText, setNewCommentText] = useState("");
 
   const formattedDate = format(publishedAt, "d 'de' LLLL 'às' HH:mm'h'", {
@@ -32,18 +32,18 @@ export const Post = ({ author, publishedAt, content }: Props) => {
     addSuffix: true,
   });
 
-  const handleCreateComment = () => {
+  const handleCreateComment = (event: any) => {
     event?.preventDefault();
     setComment([...comment, newCommentText]);
     setNewCommentText("");
   };
 
-  const handleNewCommentChange = () => {
+  const handleNewCommentChange = (event: any) => {
     event?.target.setCustomValidity("");
     setNewCommentText(event?.target?.value);
   };
 
-  const handleInvalid = () => {
+  const handleInvalid = (event: any) => {
     event?.target.setCustomValidity("campo obrigatório");
   };
 
