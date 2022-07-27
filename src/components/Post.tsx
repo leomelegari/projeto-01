@@ -20,9 +20,7 @@ interface Props {
 }
 
 export const Post = ({ author, publishedAt, content }: Props) => {
-  const [comment, setComment] = useState([
-    "Excelente! Parabéns pelo post e contribuição!",
-  ]);
+  const [comment, setComment] = useState([]);
   const [newCommentText, setNewCommentText] = useState("");
 
   const formattedDate = format(publishedAt, "d 'de' LLLL 'às' HH:mm'h'", {
