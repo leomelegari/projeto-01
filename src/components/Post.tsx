@@ -23,7 +23,6 @@ export const Post = ({ author, publishedAt, content }: Props) => {
   const [comment, setComment] = useState([
     "Excelente! Parabéns pelo post e contribuição!",
   ]);
-
   const [newCommentText, setNewCommentText] = useState("");
 
   const formattedDate = format(publishedAt, "d 'de' LLLL 'às' HH:mm'h'", {
@@ -42,8 +41,21 @@ export const Post = ({ author, publishedAt, content }: Props) => {
   };
 
   const handleNewCommentChange = () => {
+    event?.target.setCustomValidity("");
     setNewCommentText(event?.target?.value);
   };
+
+  const handleInvalid = () => {
+    event?.target.setCustomValidity("campo obrigatório");
+  };
+
+  const deleteComment = (commentToDelete: any) => {
+    const newCommentList = comment.filter((list) => list !== commentToDelete);
+
+    setComment(newCommentList);
+  };
+
+  const isNewCommentEmpty = newCommentText.length === 0;
 
   return (
     <article className={styles.post}>
@@ -62,10 +74,10 @@ export const Post = ({ author, publishedAt, content }: Props) => {
       <div className={styles.content}>
         {content.map((item) => {
           if (item.type === "paragraph") {
-            return <p>{item.content}</p>;
+            return <p key={item.content}>{item.content}</p>;
           } else {
             return (
-              <p>
+              <p key={item.content}>
                 <a href="">{item.content}</a>
               </p>
             );
@@ -80,15 +92,25 @@ export const Post = ({ author, publishedAt, content }: Props) => {
           name="commentArea"
           value={newCommentText}
           placeholder="Deixe um comentário"
+          onInvalid={handleInvalid}
+          required
         />
         <footer>
-          <button type="submit">Publicar</button>
+          <button disabled={isNewCommentEmpty} type="submit">
+            Publicar
+          </button>
         </footer>
       </form>
 
       <div className={styles.commentList}>
         {comment.map((comment) => {
-          return <Comment content={comment} />;
+          return (
+            <Comment
+              key={comment}
+              content={comment}
+              onDeleteComment={deleteComment}
+            />
+          );
         })}
       </div>
     </article>
