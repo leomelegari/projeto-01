@@ -3,7 +3,7 @@ import { Comment } from "./Comment";
 import styles from "./Post.module.css";
 import { format, formatDistanceToNow } from "date-fns";
 import ptBR from "date-fns/locale/pt-BR";
-import { useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 
 interface Props {
   id?: number;
@@ -21,7 +21,7 @@ interface Props {
 
 export const Post = ({ author, publishedAt, content }: Props) => {
   const [comment, setComment] = useState<string[]>([]);
-  const [newCommentText, setNewCommentText] = useState("");
+  const [newCommentText, setNewCommentText] = useState<string>("");
 
   const formattedDate = format(publishedAt, "d 'de' LLLL 'às' HH:mm'h'", {
     locale: ptBR,
@@ -32,22 +32,18 @@ export const Post = ({ author, publishedAt, content }: Props) => {
     addSuffix: true,
   });
 
-  const handleCreateComment = (event: any) => {
-    event?.preventDefault();
+  const handleCreateComment = (event: FormEvent) => {
+    event.preventDefault();
     setComment([...comment, newCommentText]);
     setNewCommentText("");
   };
 
-  const handleNewCommentChange = (event: any) => {
-    event?.target.setCustomValidity("");
-    setNewCommentText(event?.target?.value);
+  const handleNewCommentChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+    event.target.setCustomValidity("");
+    setNewCommentText(event.target.value);
   };
 
-  const handleInvalid = (event: any) => {
-    event?.target.setCustomValidity("campo obrigatório");
-  };
-
-  const deleteComment = (commentToDelete: any) => {
+  const deleteComment = (commentToDelete: string) => {
     const newCommentList = comment.filter((list) => list !== commentToDelete);
 
     setComment(newCommentList);
@@ -90,7 +86,6 @@ export const Post = ({ author, publishedAt, content }: Props) => {
           name="commentArea"
           value={newCommentText}
           placeholder="Deixe um comentário"
-          onInvalid={handleInvalid}
           required
         />
         <footer>

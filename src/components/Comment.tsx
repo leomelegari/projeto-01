@@ -3,16 +3,25 @@ import { useState } from "react";
 import { Avatar } from "./Avatar";
 import styles from "./Comment.module.css";
 
-export const Comment = ({ content, onDeleteComment }: any) => {
-  const [likeCount, setLikeCount] = useState(0);
+interface Props {
+  content: string;
+  onDeleteComment: (commentToDelete: string) => void;
+}
+
+export const Comment = ({ content, onDeleteComment }: Props) => {
+  const [likeCount, setLikeCount] = useState<number>(0);
 
   const handleDeleteComment = () => {
     onDeleteComment(content);
   };
 
-  // const handleLikeAdd = () => {
-  //   setLikeCount(likeCount + 1);
-  // };
+  // sempre que for utilizar o valor anterior para realizar a alteração de um estado,
+  // o ideial é fazer da forma abaixo
+  const handleLikeAdd = () => {
+    setLikeCount((state) => {
+      return state + 1;
+    });
+  };
 
   return (
     <div className={styles.comment}>
@@ -34,7 +43,7 @@ export const Comment = ({ content, onDeleteComment }: any) => {
           <p>{content}</p>
         </div>
         <footer>
-          <button onClick={() => setLikeCount(likeCount + 1)}>
+          <button onClick={handleLikeAdd}>
             <ThumbsUp />
             Aplaudir <span>{likeCount}</span>
           </button>
